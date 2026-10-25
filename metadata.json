@@ -1,0 +1,182 @@
+{
+  "name": "FLEURS-mini",
+  "version": "1.0.0",
+  "created_at": "2026-10-25T17:26:49+08:00",
+  "builder": "build_fleurs_mini.py",
+  "repo_git_rev": "6eeb46b-dirty",
+  "source": {
+    "dataset": "google/fleurs (FLEURS, arXiv 2205.12446)",
+    "split": "test",
+    "locales": {
+      "cmn_hans_cn": "zh",
+      "en_us": "en",
+      "es_419": "es",
+      "pt_br": "pt",
+      "it_it": "it"
+    },
+    "source_dir": "/home/season/github/qwen3-asr-wp0/data/fleurs/data",
+    "tsv_sha256": {
+      "zh": "5734461648f816181d7dab5fc79204b18c4b9bc2cd5138225b25c72d18385d21",
+      "en": "74c046239374deeb60fa63f258f907388093a32bcaa3140965f70ef05c79f7ca",
+      "es": "d107a93a4f54a18ac25cd470bb4cdadce14fb075b0c1d1542258e274d209ec09",
+      "pt": "4a7b8ae8ce07c355dcd2cf087a6486c7c3ab931d751b9a9218a9ee0cd798964b",
+      "it": "af1a6d7295547d283441e2ea2e6f24f41d9b26098b47fe3d588930cd053c7b08"
+    }
+  },
+  "construction": {
+    "deterministic": true,
+    "seed": null,
+    "target_seconds_per_lang": 600.0,
+    "accept_window_s": [
+      590,
+      610
+    ],
+    "core": {
+      "definition": "sentence_ids with >=1 valid recording in all 5 locales",
+      "pool_size": 330,
+      "core_size": 43,
+      "it_min_sum_cap_s": 480.0,
+      "ordering": "it/en min-duration ratio ascending, then sid"
+    },
+    "fill_order": [
+      "en",
+      "zh",
+      "es",
+      "pt",
+      "it"
+    ],
+    "recording_choice": "per sid, recording closest to min(lang_median, 600 - running_total)",
+    "excluded_sids_cascade10": [
+      "1669",
+      "1673",
+      "1699",
+      "1771",
+      "1832",
+      "1877",
+      "1914",
+      "1915",
+      "1949",
+      "1980"
+    ],
+    "malformed_tsv_rows_skipped": {
+      "zh": 0,
+      "en": 2,
+      "es": 0,
+      "pt": 6,
+      "it": 3
+    }
+  },
+  "audio_format": "wav, 16 kHz, mono, PCM16 (re-encoded from FLEURS sources)",
+  "tasks": {
+    "langid": "langid/langid.jsonl (5 classes, duration-balanced)",
+    "asr": "asr/asr_<lang>.jsonl x 5",
+    "translation": "translation/<src>_<tgt>.jsonl x 20 directions"
+  },
+  "stats": {
+    "per_lang": {
+      "en": {
+        "n_utterances": 53,
+        "n_sids": 53,
+        "n_core_sids": 43,
+        "total_duration_s": 602.5,
+        "duration_min_s": 6.9,
+        "duration_median_s": 10.4,
+        "duration_max_s": 20.7,
+        "gender": {
+          "FEMALE": 17,
+          "MALE": 36
+        }
+      },
+      "zh": {
+        "n_utterances": 54,
+        "n_sids": 54,
+        "n_core_sids": 43,
+        "total_duration_s": 601.8,
+        "duration_min_s": 6.6,
+        "duration_median_s": 10.9,
+        "duration_max_s": 20.7,
+        "gender": {
+          "MALE": 39,
+          "FEMALE": 15
+        }
+      },
+      "es": {
+        "n_utterances": 50,
+        "n_sids": 50,
+        "n_core_sids": 43,
+        "total_duration_s": 597.6,
+        "duration_min_s": 7.6,
+        "duration_median_s": 11.5,
+        "duration_max_s": 21.5,
+        "gender": {
+          "MALE": 35,
+          "FEMALE": 15
+        }
+      },
+      "pt": {
+        "n_utterances": 49,
+        "n_sids": 49,
+        "n_core_sids": 43,
+        "total_duration_s": 603.4,
+        "duration_min_s": 8.5,
+        "duration_median_s": 11.6,
+        "duration_max_s": 20.1,
+        "gender": {
+          "MALE": 49
+        }
+      },
+      "it": {
+        "n_utterances": 45,
+        "n_sids": 45,
+        "n_core_sids": 43,
+        "total_duration_s": 600.4,
+        "duration_min_s": 8.2,
+        "duration_median_s": 13.3,
+        "duration_max_s": 19.7,
+        "gender": {
+          "FEMALE": 44,
+          "MALE": 1
+        }
+      }
+    },
+    "langid_total": 251,
+    "translation_pairs": {
+      "en->zh": 53,
+      "en->es": 50,
+      "en->pt": 49,
+      "en->it": 45,
+      "zh->en": 53,
+      "zh->es": 50,
+      "zh->pt": 49,
+      "zh->it": 45,
+      "es->en": 50,
+      "es->zh": 50,
+      "es->pt": 49,
+      "es->it": 45,
+      "pt->en": 49,
+      "pt->zh": 49,
+      "pt->es": 49,
+      "pt->it": 45,
+      "it->en": 45,
+      "it->zh": 45,
+      "it->es": 45,
+      "it->pt": 45
+    }
+  },
+  "contamination_notes": [
+    "FLEURS test split was never used in LoRA training or pseudolabels (pseudolabels.jsonl: 0/14123 items reference test-split sids).",
+    "Overlaps the GEMBA-WP0-v1 eval universe (same FLEURS test split) by construction.",
+    "The 10 cascade-validation sids are excluded from all tasks."
+  ],
+  "langid_gender_confound": {
+    "upstream_distribution": {
+      "zh": "70% M",
+      "en": "36% M",
+      "es": "67% M",
+      "pt": "100% M (913/913 test rows)",
+      "it": "4% M (37/862 test rows)"
+    },
+    "implication": "pt and it are nearly gender-segregated in upstream FLEURS test, so LangID accuracy on this set can exploit a speaker-gender/pitch shortcut for pt vs it. Report per-class accuracy and treat pt/it separation as upper-bound; do not attribute it purely to language modeling."
+  },
+  "license": "CC-BY-4.0 (upstream FLEURS)"
+}
